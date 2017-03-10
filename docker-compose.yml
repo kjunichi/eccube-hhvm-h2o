@@ -1,0 +1,56 @@
+version: '2'
+
+services:
+    h2o:
+        build: h2o
+        ports:
+          - "8181:8181"
+          - "8080:80"
+          - "8443:443"
+        environment:
+            - TZ=Asia/Tokyo
+            - LANG=ja_JP.UTF-8
+        links:
+            - app:hhvm
+        volumes_from:
+            - eccube_data
+
+    app:
+        build: app
+        ports:
+            - "9000:9000"
+        environment:
+            - TZ=Asia/Tokyo
+            - LANG=ja_JP.UTF-8
+            - DBSERVER=db
+            - DBUSER=postgres
+            - MAIL_HOST=mail
+            - COMPOSER_PROCESS_TIMEOUT=2000
+            - ROOT_URLPATH=
+            - PHP_XDEBUG_ENABLED=1
+        links:
+            - postgres:db
+        volumes_from:
+            - eccube_data
+
+    postgres:
+        build: postgres
+        environment:
+            - TZ=Asia/Tokyo
+            - LANG=ja_JP.UTF-8
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+    mail:
+        image: schickling/mailcatcher
+        ports:
+            - "1080:1080"
+
+    eccube_data:
+        build: eccube_data
+
+volumes:
+    postgres_data:
+
