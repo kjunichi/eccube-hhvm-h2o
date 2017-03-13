@@ -25,6 +25,7 @@ services:
             - DBSERVER=db
             - DBUSER=postgres
             - MAIL_HOST=mail
+            - MAIL_PORT=1025
             - COMPOSER_PROCESS_TIMEOUT=2000
             - ROOT_URLPATH=
             - PHP_XDEBUG_ENABLED=1
